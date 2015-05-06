@@ -29,6 +29,6 @@ def ReadPost(request, pageid):
 	if (pageid.find(r'/')>=0) or (pageid[0]=='.'):
 		return 0
 	if (pageid[0]=='C'):
-		return render(request, BASE_DIR+'/blog/customblog/'+pageid[1:]+'.html', {})
+		return render(request, 'customblog/'+pageid[1:]+'.html', {})
 	else:
 		return render(request, 'read.html',{'data':pageid})
