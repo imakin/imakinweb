@@ -1,4 +1,7 @@
 {% extends "default.html" %}
+{% block head_inside %}
+	<script type='text/javascript' src="{% static '' %}"></script>
+{% endblock %}
 {% block main_inside %}
 	<ul>
 	{% for post in posts_sqlite %}
