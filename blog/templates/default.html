@@ -8,7 +8,7 @@
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 		{% load staticfiles %}
-		<link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 		<script src="{% static 'jquery.js' %}"></script>
 		
 		{% block head_inside %}{% endblock %}
@@ -21,7 +21,9 @@
 		<header>
 			{% block header_inside %}{% endblock %}
 			<div>
-				<img src="{% static 'img/M.png' %}"/>
+				<a href="/"  title="Izzulmakin's personal space, archive, article, document, & library">
+					<img src="{% static 'img/M.png' %}" alt="M"/>
+				</a>
 			</div>
 			<h1>Makin, personal archive &amp; document library</h1>
 			<ul>
@@ -41,7 +43,7 @@
 		
 		{% block footer %}
 		<footer>
-			<hr/> ini footer
+			ini footer
 			{% block footer_inside %}{% endblock %}
 		</footer>
 		{% endblock %}

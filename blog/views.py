@@ -21,7 +21,7 @@ def ListPost(request):
 		blogs = [blogsdata, blogsrange]
 		return blogsdata
 	
-	return render(request, 'posts.html', {'posts_sqlite':_SQLite(), 'posts_custom':_Custom(), 'ok':330})
+	return render(request, 'listpost.html', {'posts_sqlite':_SQLite(), 'posts_custom':_Custom(), 'ok':330})
 
 def ReadPost(request, permalink,tipe):
 	""" tipe is either S for SQLite or C for custom """
@@ -30,5 +30,5 @@ def ReadPost(request, permalink,tipe):
 		return 0
 	if (tipe=='C'):
 		return render(request, os.path.join('customblog',permalink+'.html'), {})
-	elif (tipe=='S'):
+	else:
 		return render(request, 'read.html',{'data':permalink})

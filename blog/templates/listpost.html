@@ -2,7 +2,10 @@
 {% block main_inside %}
 	<ul>
 	{% for post in posts_sqlite %}
-		<li>{{ post }}</li>
+		<li>
+			<a href="read/{{ post.url }}/">{{ post }}</a>
+			<p>{{ post.excerpt }}</p>
+		</li>
 	{% endfor %}
 	{% for post in posts_custom %}
 		<li>{{ post }}</li>
