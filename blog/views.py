@@ -23,12 +23,12 @@ def ListPost(request):
 	
 	return render(request, 'posts.html', {'posts_sqlite':_SQLite(), 'posts_custom':_Custom(), 'ok':330})
 
-def ReadPost(request, pageid,tipe):
+def ReadPost(request, permalink,tipe):
 	""" tipe is either S for SQLite or C for custom """
 	#-- security
-	if (pageid.find(r'/')>=0) or (pageid[0]=='.'):
+	if (permalink.find(r'/')>=0):
 		return 0
 	if (tipe=='C'):
-		return render(request, os.path.join('customblog',pageid+'.html'), {})
+		return render(request, os.path.join('customblog',permalink+'.html'), {})
 	elif (tipe=='S'):
-		return render(request, 'read.html',{'data':pageid})
+		return render(request, 'read.html',{'data':permalink})
