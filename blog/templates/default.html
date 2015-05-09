@@ -9,7 +9,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 		{% load staticfiles %}
 		<link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
-		<script src="/static/jquery.js"></script>
+		<script src="{% static 'jquery.js' %}"></script>
 		
 		{% block head_inside %}{% endblock %}
 	</head>
@@ -20,7 +20,16 @@
 		{%block header %}
 		<header>
 			{% block header_inside %}{% endblock %}
-			ini header <hr/>
+			<div>
+				<img src="{% static 'img/M.png' %}"/>
+			</div>
+			<h1>Makin, personal archive &amp; document library</h1>
+			<ul>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Contact</a></li>
+				<li><a href="#">Twitter</a></li>
+				<li><a href="#">Github</a></li>
+			</ul>
 		</header>
 		{% endblock %}
 		
