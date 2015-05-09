@@ -141,10 +141,13 @@ h1.normal{
 		width:$pagewidth;
 		li{
 			display:block;
-			padding-left:$contentpadding;
-			padding-right:$contentpadding;
-			border-left:solid 3px #B3B3B3;
+			padding: 25px $contentpadding;
+			border:solid 1px transparent;
+			border-left:solid 3px transparent;
 			margin-bottom:20px;
+			a{
+				display:inline-block;
+			}
 		}
 	}
 }
