@@ -1,6 +1,11 @@
 {% extends "default.html" %}
 {% block main_inside %}
-	{% for post in posts_custom %}
-		{{ post }}
+	<ul>
+	{% for post in posts_sqlite %}
+		<li>{{ post }}</li>
 	{% endfor %}
+	{% for post in posts_custom %}
+		<li>{{ post }}</li>
+	{% endfor %}
+	</ul>
 {% endblock %}
