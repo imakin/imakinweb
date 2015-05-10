@@ -1,26 +1,22 @@
 * {
   padding: 0px;
-  margin: 0px;
-}
+  margin: 0px; }
 
 body {
   padding: 0px;
   margin: 0px;
   font-family: "Sans", "Arial";
   font-size: 14px;
-  background-color: #f2f2f2;
-}
+  background-color: #f2f2f2; }
 
 a, a:visited {
   color: blue;
-  text-decoration: none;
-}
+  text-decoration: none; }
 
 ul li {
   padding: 0px;
   margin: 0px;
-  list-style-type: none;
-}
+  list-style-type: none; }
 
 header {
   width: 860px;
@@ -34,88 +30,50 @@ header {
   color: #5286A0;
   line-height: 80px;
   z-index: 0;
-  font-family: "Sans", "Arial";
-}
-header h1 {
-  font-size: 1em;
-  float: left;
-  display: inline-block;
-  padding-left: 200px;
-}
-header ul {
-  float: right;
-  margin-right: -10px;
-}
-header ul li {
-  float: left;
-}
-header ul li a {
-  color: #3B0000;
-  font-size: 11px;
-  display: inline-block;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-header ul li a:hover {
-  background-color: #5286A0;
-  background-color: #ff7d00;
-  color: white;
-}
-header div {
-  display: inline-block;
-  vertical-align: middle;
-  float: left;
-}
-header div img {
-  margin-top: 25px;
-}
+  font-family: "Sans", "Arial"; }
+  header h1 {
+    font-size: 1em;
+    float: left;
+    display: inline-block;
+    padding-left: 200px; }
+  header ul {
+    float: right;
+    margin-right: -10px; }
+    header ul li {
+      float: left; }
+      header ul li a {
+        color: #3B0000;
+        font-size: 0.78571em;
+        display: inline-block;
+        padding-left: 10px;
+        padding-right: 10px; }
+      header ul li a:hover {
+        background-color: #5286A0;
+        background-color: #ff7d00;
+        color: white; }
+  header div {
+    display: inline-block;
+    vertical-align: middle;
+    float: left; }
+    header div img {
+      margin-top: 25px; }
 
 #documentlist li {
   width: 300px;
   text-align: justify;
-  color: #555555;
-}
-
-p {
-  padding: 5px;
-  color: black;
-  font-family: "Arial";
-  font-size: 10pt;
-  margin-top: 5px;
-}
-p > pre, p > div {
-  color: black;
-  font-family: "Arial";
-  font-size: 10pt;
-  width: 100%;
-}
-
-.kontener {
-  background-color: white;
-  padding: 20px;
-  border: solid 2px #BBBBBB;
-}
-.kontener pre {
-  background-color: #EAF0F4 !important;
-  color: #5E5E5E !important;
-  font-size: 0.9em;
-  padding: 5px;
-}
+  color: #555555; }
 
 .heading {
   font-weight: bold;
-  color: #7E6433;
-}
+  color: #7E6433; }
 
 h1.normal {
   color: black;
   font-size: 10pt;
-  font-weight: normal;
-}
+  font-weight: normal; }
 
 #documentlist li {
-  margin-top: 10px;
-}
+  margin-top: 10px; }
 
 #content {
   width: 860px;
@@ -126,22 +84,20 @@ h1.normal {
   border-top: solid 1px #c8fac8;
   border-left: solid 1px #fac8c8;
   border-bottom: solid 1px #c8c8c8;
-  border-right: solid 1px #fac8c8;
-}
-#content ul {
-  padding: 0px;
-  margin-left: -50px;
-  width: 960px;
-}
-#content ul li {
-  display: block;
-  padding: 25px 50px;
-  border: solid 1px transparent;
-  border-left: solid 3px transparent;
-  margin-bottom: 20px;
-}
-#content ul li a {
-  display: inline-block;
-}
-
-/*# sourceMappingURL=style.css.map */
+  border-right: solid 1px #fac8c8; }
+  #content ul {
+    padding: 0px;
+    margin-left: -50px;
+    width: 960px; }
+    #content ul li {
+      display: block;
+      padding: 25px 50px;
+      border: solid 1px transparent;
+      border-left: solid 3px transparent;
+      margin-bottom: 20px; }
+      #content ul li a {
+        display: inline-block; }
+        #content ul li a p, #content ul li a span {
+          color: black; }
+        #content ul li a .date {
+          font-size: 0.7em; }

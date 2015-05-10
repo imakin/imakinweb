@@ -1,13 +1,14 @@
 $pagewidth: 960px;
 $px:px;
 $primaryfont:"Sans","Arial";
+$primaryfontsize:14px;
 
 *{padding:0px;margin:0px;}
 body{
 	padding:0px;
 	margin:0px;
 	font-family:$primaryfont;
-	font-size:14px;
+	font-size:$primaryfontsize;
 	background-color:rgb(242,242,242);
 }
 a,a:visited{
@@ -50,7 +51,7 @@ header{
 			float:left;
 			a{
 				color:#3B0000;
-				font-size:11px;
+				font-size: #{11px/$primaryfontsize}em;
 				display:inline-block;
 				padding-left:$linkspace;
 				padding-right:$linkspace;
@@ -77,34 +78,6 @@ header{
 	width:300px;
 	text-align:justify;
 	color:#555555;
-}
-
-p{
-	padding:5px;
-	color:black;
-	font-family:"Arial";
-	font-size:10pt;
-	margin-top:5px;
-	
-	> pre, >div{
-		color:black;
-		font-family:"Arial";
-		font-size:10pt;
-		width:100%;
-	}
-}
-
-.kontener{
-	background-color:white;
-	padding:20px;
-	border:solid 2px #BBBBBB;
-
-	pre{
-		background-color:#EAF0F4 !important;
-		color:#5E5E5E !important;
-		font-size:0.9em;
-		padding:5px;
-	}
 }
 .heading{
 	font-weight:bold;color:#7E6433;
@@ -147,6 +120,12 @@ h1.normal{
 			margin-bottom:20px;
 			a{
 				display:inline-block;
+				p,span{
+					color:black;
+				}
+				.date{
+					font-size:0.7em;
+				}
 			}
 		}
 	}

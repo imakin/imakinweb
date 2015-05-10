@@ -10,6 +10,7 @@
 			<a href="read/{{ post.url }}/">
 				<div>
 					{{ post }}
+					<span class="date">{{ post.date_published }}</span>
 					{% autoescape off %}
 						<p>{{ post.excerpt }}</p>
 					{% endautoescape %}
