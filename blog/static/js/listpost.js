@@ -1,11 +1,13 @@
 $( document ).ready(function() {
+	var pagebackground = $("body").css("background-color");
+	
 	$("#content ul li").each(
 		function(){
 			$(this).hover(
 				function(){
 					$(this).css('border-left-width','21px');
 					$(this).css('padding-left','33px');
-					$(this).css('border-left-color','rgb(242,242,242)');
+					$(this).css('border-left-color',pagebackground);
 					$(this).css('border-top-color','#EBEBEB');
 					$(this).css('border-bottom-color','#EBEBEB');
 					$(this).css('border-right-color','#EBEBEB');

@@ -3,13 +3,14 @@ $px:px;
 $primaryfont:"Sans","Arial";
 $primaryfontsize:14px;
 
+
 *{padding:0px;margin:0px;}
 body{
 	padding:0px;
 	margin:0px;
 	font-family:$primaryfont;
 	font-size:$primaryfontsize;
-	background-color:rgb(242,242,242);
+	background-color:rgb(232,232,232);
 }
 a,a:visited{
 	color:blue;
@@ -84,9 +85,8 @@ header{
 }
 h1.normal{
 	color:black;
-	font-size:10pt;
+	font-size:$primaryfontsize;
 	font-weight:normal;
-
 }
 
 #documentlist 

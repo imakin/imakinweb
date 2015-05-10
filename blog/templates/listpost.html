@@ -19,7 +19,11 @@
 		</li>
 	{% endfor %}
 	{% for post in posts_custom %}
-		<li>{{ post }}</li>
+		<li>
+			<a href="read/{{ post }}/C">
+				{{ post }}
+			</a>
+		</li>
 	{% endfor %}
 	</ul>
 {% endblock %}
