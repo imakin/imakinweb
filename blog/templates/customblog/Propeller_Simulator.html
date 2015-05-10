@@ -1,6 +1,129 @@
 {% extends "default.html" %}
+{% block head_inside %}
+	{% load staticfiles %}
+	<script type='text/javascript' src="{% static 'js/pixi.js' %}"></script>
+{% endblock %}
 {% block main_inside %}
-	<canvas>
+	<script>
+	var state = [
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], /**-0.8**/
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],/**0.0**/
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], /**-0.8**/
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],/**0.0**/
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], /**-0.8**/
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],/**0.0**/
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		
-	</canvas>
+	];
+	var H=300;
+	// You can use either PIXI.WebGLRenderer or PIXI.CanvasRenderer
+	var renderer = new PIXI.WebGLRenderer(800, 600,{backgroundColor : 0x0});
+
+	document.getElementById('content').appendChild(renderer.view);
+
+	var stage = new PIXI.Container();
+	
+	var thing = new PIXI.Graphics();
+	var led = new PIXI.Graphics();
+	stage.addChild(thing);
+	stage.addChild(led);
+	thing.position.x = 400;
+	thing.position.y = H+50;
+	led.position.x = 400;
+	led.position.y = H+50;
+	
+
+	requestAnimationFrame(animate);
+	var dir=0;
+	var count=0;
+	var step;
+	function animate() {
+		if (dir==0)
+			count += 0.1;
+		else
+			count -= 0.1;
+		if (count>1.8)
+			dir = 1;
+		if (count<-1.8)
+			dir = 0;
+		
+		thing.clear();
+		thing.lineStyle(10, 0, 1);
+		thing.beginFill(0x00000);
+		
+		thing.moveTo(0,0);
+		thing.lineTo(-5,0);
+		thing.lineTo(-5,-H);
+		thing.lineTo(5,-H);
+		thing.lineTo(5,0);
+		thing.lineTo(0,0);
+		thing.endFill();
+		thing.rotation= count;
+		
+		led.clear();
+		led.lineStyle(1, 0, 1);
+		
+		for (var i=0;i<state.length;i++)
+		{
+			var step = Math.round((count+1.8)*10);
+			if (step<state.length && step>=0)
+			{
+				if (state[step][i]==1)
+					led.beginFill(0xFF0000);
+				else
+					led.beginFill(0x000000);
+			}
+			led.drawRect(-4,-H+i*10+10,8,8);
+		}
+		led.rotation =count;
+		
+		renderer.render(stage);
+
+		requestAnimationFrame(animate);
+	}
+	</script>
 {% endblock %}
