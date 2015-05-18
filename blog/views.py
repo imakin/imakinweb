@@ -31,5 +31,5 @@ def ReadPost(request, permalink,tipe):
 	if (tipe=='C'):
 		return render(request, os.path.join('customblog',permalink+'.html'), {})
 	else:
-		blogdata = get_object_or_404(Post,url=permalink)
+		blogdata = get_object_or_404(Post,url=permalink) #kondisi: url==permalink
 		return render(request, 'read.html',{'data':permalink,'blog':blogdata})

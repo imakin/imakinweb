@@ -83,10 +83,15 @@ header{
 .heading{
 	font-weight:bold;color:#7E6433;
 }
-h1.normal{
+.normal{
 	color:black;
 	font-size:$primaryfontsize;
 	font-weight:normal;
+}
+h1.normal{
+	font-size:1.1em;
+	font-weight:bold;
+	color:#2B6175;
 }
 
 #documentlist 
@@ -128,5 +133,22 @@ h1.normal{
 				}
 			}
 		}
+	}
+}
+.hidden{
+	visibility:hidden;
+	display:none;
+}
+.title-wrapper{
+	display:block;
+	text-align:center;
+	.title {
+		margin:20px auto;
+		display:inline-block;
+	}
+}
+.blog {
+	div {
+		margin:10px auto;
 	}
 }

@@ -1,9 +1,19 @@
 {% extends "default.html" %}
 {% block main_inside %}
-	{{ data }}
-	<div>
-		{% autoescape off %}
-			{{ blog.text }}
-		{% endautoescape %}
+	<div class='hidden'>{{ data }}</div>
+	<div class='title-wrapper'>
+		<h1 class='title normal'>{{ blog.title }}</h1>
+	</div>
+	<div class="blog">
+		<div>
+			{% autoescape off %}
+				<h2 class='normal'>{{ blog.excerpt }}</h2>
+			{% endautoescape %}
+		</div>
+		<div>
+			{% autoescape off %}
+				{{ blog.text }}
+			{% endautoescape %}
+		</div>
 	</div>
 {% endblock %}
