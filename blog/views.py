@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 
 from django.utils import timezone
 from .models import Post
@@ -31,4 +31,5 @@ def ReadPost(request, permalink,tipe):
 	if (tipe=='C'):
 		return render(request, os.path.join('customblog',permalink+'.html'), {})
 	else:
-		return render(request, 'read.html',{'data':permalink})
+		blogdata = get_object_or_404(Post,url=permalink)
+		return render(request, 'read.html',{'data':permalink,'blog':blogdata})

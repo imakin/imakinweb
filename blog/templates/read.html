@@ -1,4 +1,9 @@
 {% extends "default.html" %}
 {% block main_inside %}
 	{{ data }}
+	<div>
+		{% autoescape off %}
+			{{ blog.text }}
+		{% endautoescape %}
+	</div>
 {% endblock %}
