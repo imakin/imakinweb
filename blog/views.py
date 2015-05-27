@@ -18,7 +18,8 @@ def ListPost(request):
 		files = os.listdir(os.path.join(BASE_DIR,'blog','templates','customblog'))#-- this is custom blog dir
 		blogsdata = re.compile("(\w*).html").findall(str(files))
 		blogsrange = range(len(blogsdata))
-		blogs = [blogsdata, blogsrange]
+		for x in range(len(blogsdata)):
+			blogsdata[x] = blogsdata[x].replace("_"," ")
 		return blogsdata
 	
 	return render(request, 'listpost.html', {'posts_sqlite':_SQLite(), 'posts_custom':_Custom(), 'ok':330})
