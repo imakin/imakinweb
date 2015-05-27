@@ -1,0 +1,37 @@
+{% extends "default.html" %}
+{% block head_inside %}
+	{% load staticfiles %}
+	<script type='text/javascript' src="{% static 'js/custom/slam/phaser.js' %}"></script>
+{% endblock %}
+{% block main_inside %}
+	<script>
+		// dokumentasi http://phaser.io/docs/2.3.0/Phaser.Game.html
+		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'slam',null, true);
+		//~ var camera = new Phaser.Camera(game,0,250,300,200,200);
+		
+		// And now we define our first and only state, I'll call it 'main' 
+		var main_state = {
+
+			preload: function() {
+				game.load.image('vehicle', '/static/img/custom/slam/avatar.png');
+			},
+
+			create: function() { 
+				// Parameters: x position, y position, name of the sprite
+				this.avatar = game.add.sprite(250, 300, 'vehicle');
+				
+			},
+			   
+			update: function() {
+				// Increase the angle of the sprite by one
+				//this.avatar.angle += 1;
+			} 
+		}
+
+		// And finally we tell Phaser to add and start our 'main' state
+		game.state.add('main', main_state);
+		game.state.start('main');
+	</script>
+	<div id="slam">
+	</div>
+{% endblock %}
