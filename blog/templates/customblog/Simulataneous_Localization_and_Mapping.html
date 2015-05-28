@@ -6,10 +6,8 @@
 {% block main_inside %}
 	<script>
 		// dokumentasi http://phaser.io/docs/2.3.0/Phaser.Game.html
-		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'slam',null, true);
-		//~ var camera = new Phaser.Camera(game,0,250,300,200,200);
-		
-		// And now we define our first and only state, I'll call it 'main' 
+		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'div_slam',null, true);
+		//~ var pc = new Phaser.Physics.Arcade(game);
 		var main_state = {
 
 			preload: function() {
@@ -17,21 +15,24 @@
 			},
 
 			create: function() { 
-				// Parameters: x position, y position, name of the sprite
 				this.avatar = game.add.sprite(250, 300, 'vehicle');
-				
+				game.physics.arcade.enable(this.avatar);
+				//~ this.avatar.body.angularVelocity = game.physics.arcade.moveToXY(this.avatar,0,0,20,0);
+				//~ this.avatar.body.angularVelocity = game.physics.arcade.accelerateToXY(this.avatar,0,0,20);
+				this.avatar.angle = this.avatar.angle+(game.physics.arcade.moveToXY(this.avatar,640,0,20,0) * 57.296/3);
 			},
 			   
 			update: function() {
-				// Increase the angle of the sprite by one
 				//this.avatar.angle += 1;
-			} 
+				//~ this.avatar.body.velocity.x = 4;
+				//~ pc.moveToXY(this.avatar,0,0,20,0);
+				//~ this.avatar.angele = game.physics.arcade.moveToXY(this.avatar,0,0,20,0);
+			}
 		}
 
-		// And finally we tell Phaser to add and start our 'main' state
 		game.state.add('main', main_state);
 		game.state.start('main');
 	</script>
-	<div id="slam">
+	<div id="div_slam">
 	</div>
 {% endblock %}
