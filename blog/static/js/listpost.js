@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 	var pagebackground = $("body").css("background-color");
 	
-	$("#content ul li").each(
+	$("#main ul li").each(
 		function(){
 			$(this).hover(
 				function(){

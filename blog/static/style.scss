@@ -101,7 +101,7 @@ h1.normal{
 	}
 }
 
-#content /**main container of the page **/{
+#main /**main container of the page **/ {
 	$contentpadding:50px;
 	width:#{$pagewidth - ($contentpadding*2)};
 	padding:$contentpadding;
