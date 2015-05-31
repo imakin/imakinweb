@@ -1,5 +1,14 @@
 {% extends "default.html" %}
 {% block head_inside %}
+	<style>
+		#main{
+			text-align:center;
+		}
+		#div_slam{
+			border:solid 1px #CACACA;
+			display:inline-block;
+		}
+	</style>
 	{% load staticfiles %}
 	<script type='text/javascript' src="{% static 'js/custom/slam/phaser.js' %}"></script>
 {% endblock %}
@@ -8,25 +17,69 @@
 		// dokumentasi http://phaser.io/docs/2.3.0/Phaser.Game.html
 		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'div_slam',null, true);
 		//~ var pc = new Phaser.Physics.Arcade(game);
+		var echo = console.log
+		var frame = 0;
+		var avatar;
+		var vehicle = {
+			move_rate:50, 
+			next_move:0,
+			rot_expected:0,
+			rot_current:0,
+			rot_diff:0,
+		};
+		
 		var main_state = {
-
+			
 			preload: function() {
-				game.load.image('vehicle', '/static/img/custom/slam/avatar.png');
+				game.load.image('sprite_vehicle', '/static/img/custom/slam/avatar.png');
 			},
 
 			create: function() { 
-				this.avatar = game.add.sprite(250, 300, 'vehicle');
-				game.physics.arcade.enable(this.avatar);
-				//~ this.avatar.body.angularVelocity = game.physics.arcade.moveToXY(this.avatar,0,0,20,0);
-				//~ this.avatar.body.angularVelocity = game.physics.arcade.accelerateToXY(this.avatar,0,0,20);
-				this.avatar.angle = this.avatar.angle+(game.physics.arcade.moveToXY(this.avatar,640,0,20,0) * 57.296/3);
+				avatar = game.add.sprite(250, 300, 'sprite_vehicle');
+				game.physics.startSystem(Phaser.Physics.ARCADE);
+				avatar.anchor.set(0.5);
+				game.physics.enable(avatar, Phaser.Physics.ARCADE);
+				avatar.body.allowRotation = true;
 			},
 			   
 			update: function() {
-				//this.avatar.angle += 1;
-				//~ this.avatar.body.velocity.x = 4;
-				//~ pc.moveToXY(this.avatar,0,0,20,0);
-				//~ this.avatar.angele = game.physics.arcade.moveToXY(this.avatar,0,0,20,0);
+				if (game.input.activePointer.isDown) {
+					//~ avatar.rotation = game.physics.arcade.moveToXY(main_state.avatar,game.input.x,game.input.y,50,0);
+					if (game.time.now > vehicle.next_move) 
+					{
+						vehicle.next_move = game.time.now + vehicle.move_rate;
+						var p = {x:game.input.x, y:game.input.y};
+						vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
+						vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
+					}
+				}
+				
+				if (vehicle.rot_diff>0.1)
+				{
+					if (avatar.rotation>vehicle.rot_expected)
+						avatar.rotation -= 0.05;
+					else 
+						avatar.rotation += 0.05;
+					vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
+					
+					//~ var angle = Math.atan2(y-avatar.y,	x-avatar.x);
+					var angle = avatar.rotation;
+					var speed = 30;
+					avatar.body.velocity.x = Math.cos(angle) * speed;
+					avatar.body.velocity.y = Math.sin(angle) * speed;
+				}
+				else
+				{
+					avatar.body.velocity.x = 0;
+					avatar.body.velocity.y = 0;
+				}
+			},
+			
+			move_to: function(x,y) {
+			},
+			vehicle_stop: function() {
+				avatar.body.velocity.x = 0;
+				avatar.body.velocity.y = 0;
 			}
 		}
 
