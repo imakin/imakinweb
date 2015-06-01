@@ -29,19 +29,41 @@
 		};
 		
 		var main_state = {
+			init: function() {
+				this.points = {
+					'x': [ 32, 128, 256, 384, 512, 608 ],
+					'y': [ 240, 240, 240, 240, 240, 240 ]
+				};
+				//~ this.bdm = null;
+				this.pi = 0;
+				this.path = [];
+			},
 			
 			preload: function() {
 				game.load.image('sprite_vehicle', '/static/img/custom/slam/avatar.png');
 			},
 
 			create: function() { 
-				avatar = game.add.sprite(250, 300, 'sprite_vehicle');
 				game.physics.startSystem(Phaser.Physics.ARCADE);
+				avatar = game.add.sprite(250, 300, 'sprite_vehicle');
 				avatar.anchor.set(0.5);
 				game.physics.enable(avatar, Phaser.Physics.ARCADE);
 				avatar.body.allowRotation = true;
+				this.bmd = game.add.bitmapData(game.width,game.height);
+				this.bmd.addToWorld();
+				this.bmd.clear();
+				
+				var py = this.points.y;
+				for (var i = 0; i < py.length; i++)
+				{
+					py[i] = this.rnd.between(32, 432);
+				}
+				//~ this.input.onDown.add(this.changeMode, this);
+				this.plot();
+
 			},
-			   
+			//~ inputDown: function() {
+			//~ },
 			update: function() {
 				if (game.input.activePointer.isDown) {
 					//~ avatar.rotation = game.physics.arcade.moveToXY(main_state.avatar,game.input.x,game.input.y,50,0);
@@ -67,6 +89,7 @@
 					var speed = 30;
 					avatar.body.velocity.x = Math.cos(angle) * speed;
 					avatar.body.velocity.y = Math.sin(angle) * speed;
+					this.plot();
 				}
 				else
 				{
@@ -75,16 +98,39 @@
 				}
 			},
 			
-			move_to: function(x,y) {
-			},
 			vehicle_stop: function() {
 				avatar.body.velocity.x = 0;
 				avatar.body.velocity.y = 0;
-			}
+			},
+			plot: function () {
+
+				//~ this.bmd.clear();
+				this.bmd.rect(avatar.body.x,avatar.body.y, 1,1, 'rgba(0,0,0,1)');
+				//~ this.path = [];
+//~ 
+				//~ var x = 1 / game.width;
+//~ 
+				//~ for (var i = 0; i <= 1; i += x)
+				//~ {
+					//~ var px = this.math.linearInterpolation(this.points.x, i);
+					//~ var py = this.math.linearInterpolation(this.points.y, i);
+					//~ 
+					//~ this.path.push( { x: px, y: py });
+//~ 
+					//~ this.bmd.rect(px, py, 1, 1, 'rgba(0, 0, 25, 1)');
+					//~ console.log(px,py);
+				//~ }
+//~ 
+				//~ for (var p = 0; p < this.points.x.length; p++)
+				//~ {
+					//~ this.bmd.rect(this.points.x[p]-3, this.points.y[p]-3, 6, 6, 'rgba(255, 0, 0, 1)');
+				//~ }
+
+			},
 		}
 
-		game.state.add('main', main_state);
-		game.state.start('main');
+		game.state.add('main', main_state,true);
+		//~ game.state.start('main');
 	</script>
 	<div id="div_slam">
 	</div>
