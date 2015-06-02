@@ -20,7 +20,7 @@
 		{%block header %}
 		<header>
 			{% block header_inside %}{% endblock %}
-			<div>
+			<div class="logo-container">
 				<a href="/"  title="Izzulmakin's personal space, archive, article, document, & library">
 					<img src="{% static 'img/M.png' %}" alt="M"/>
 				</a>
@@ -29,8 +29,8 @@
 			<ul>
 				<li><a href="#">About</a></li>
 				<li><a href="#">Contact</a></li>
-				<li><a href="#">Twitter</a></li>
-				<li><a href="#">Github</a></li>
+				<li><a href="https://twitter.com/makonil" title="random guy's twitter">Twitter</a></li>
+				<li><a href="https://github.com/imakin" title="random guy's github">Github</a></li>
 			</ul>
 		</header>
 		{% endblock %}
@@ -43,7 +43,7 @@
 		
 		{% block footer %}
 		<footer>
-			ini footer
+			This page is written in Python, whole sourcecode available <a href="https://github.com/imakin/imakinweb">here</a>
 			{% block footer_inside %}{% endblock %}
 		</footer>
 		{% endblock %}

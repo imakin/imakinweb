@@ -15,28 +15,40 @@
 {% block main_inside %}
 	<script>
 		// dokumentasi http://phaser.io/docs/2.3.0/Phaser.Game.html
+		
+		var PI = 3.14159;
 		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'div_slam',null, true);
-		//~ var pc = new Phaser.Physics.Arcade(game);
 		var echo = console.log
 		var frame = 0;
 		var avatar;
+		var p = {x:0,y:0};
 		var vehicle = {
 			move_rate:50, 
 			next_move:0,
 			rot_expected:0,
 			rot_current:0,
 			rot_diff:0,
+			pos_expected: {
+				x:0,
+				y:0
+			},
+			pos_current: {
+				x:0,
+				y:0
+			},
+			pos_diff: 0,
+			
+			calculate_rot_diff: function(current_rot) {
+				this.rot_diff = Math.abs(current_rot-vehicle.rot_expected);
+			},
+			calculate_pos_diff: function(current_x,current_y) {
+				this.pos_diff = Math.sqrt((this.pos_expected.x-current_x)*(this.pos_expected.x-current_x) + (this.pos_expected.y-current_y)*(this.pos_expected.y-current_y));
+			},
 		};
 		
 		var main_state = {
 			init: function() {
-				this.points = {
-					'x': [ 32, 128, 256, 384, 512, 608 ],
-					'y': [ 240, 240, 240, 240, 240, 240 ]
-				};
-				//~ this.bdm = null;
-				this.pi = 0;
-				this.path = [];
+				
 			},
 			
 			preload: function() {
@@ -52,49 +64,99 @@
 				this.bmd = game.add.bitmapData(game.width,game.height);
 				this.bmd.addToWorld();
 				this.bmd.clear();
-				
-				var py = this.points.y;
-				for (var i = 0; i < py.length; i++)
-				{
-					py[i] = this.rnd.between(32, 432);
-				}
-				//~ this.input.onDown.add(this.changeMode, this);
+				this.info = game.add.text(20,20,"Bismillah",{font:"normal 12px Arial"});
 				this.plot();
-
+				
+				this.path = new Phaser.Line(0,0,0,0);
 			},
-			//~ inputDown: function() {
-			//~ },
 			update: function() {
 				if (game.input.activePointer.isDown) {
-					//~ avatar.rotation = game.physics.arcade.moveToXY(main_state.avatar,game.input.x,game.input.y,50,0);
-					if (game.time.now > vehicle.next_move) 
-					{
-						vehicle.next_move = game.time.now + vehicle.move_rate;
-						var p = {x:game.input.x, y:game.input.y};
-						vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
-						vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
-					}
+					this.vehicle_setGoal();
 				}
 				
-				if (vehicle.rot_diff>0.1)
+				if (vehicle.rot_diff>0.2)
 				{
-					if (avatar.rotation>vehicle.rot_expected)
-						avatar.rotation -= 0.05;
-					else 
-						avatar.rotation += 0.05;
+					if (vehicle.rot_diff>PI/2)
+					{
+						/**-- which way is shorter, turn left or right? */
+						if (-avatar.rotation>vehicle.rot_expected) {
+							/**-- right one is shorter */
+							//~ var to_rot = (avatar.rotation - 0.05);
+							//~ if (to_rot> -PI)
+								//~ to_rot = PI-(-to_rot-PI);
+							vehicle.rot_current = (vehicle.rot_current + 0.05);
+							avatar.rotation = vehicle.rot_current;
+						}
+						else {
+							/**-- left one is shorter */
+							//~ avatar.rotation = (avatar.rotation + 0.05)% PI;
+							vehicle.rot_current = (vehicle.rot_current - 0.05);
+							avatar.rotation = vehicle.rot_current;
+						}
+					}
+					else
+					{
+						/**-- which way is shorter, turn left or right? */
+						if (avatar.rotation>vehicle.rot_expected) {
+							/**-- right one is shorter */
+							avatar.rotation = (avatar.rotation - 0.05)% PI;
+						}
+						else {
+							/**-- left one is shorter */
+							avatar.rotation = (avatar.rotation + 0.05)% PI;
+						}
+					}
+					
+					//~ if (avatar.rotation>vehicle.rot_expected)
+						//~ avatar.rotation -= 0.05;
+					//~ else 
+						//~ avatar.rotation += 0.05;
 					vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
 					
-					//~ var angle = Math.atan2(y-avatar.y,	x-avatar.x);
-					var angle = avatar.rotation;
-					var speed = 30;
-					avatar.body.velocity.x = Math.cos(angle) * speed;
-					avatar.body.velocity.y = Math.sin(angle) * speed;
-					this.plot();
+					//~ var angle = avatar.rotation;
+					//~ var speed = 30;
+					//~ avatar.body.velocity.x = Math.cos(angle) * speed;
+					//~ avatar.body.velocity.y = Math.sin(angle) * speed;
 				}
 				else
 				{
-					avatar.body.velocity.x = 0;
-					avatar.body.velocity.y = 0;
+					this.vehicle_stop();
+					//~ if (vehicle.pos_diff>30)
+					//~ {
+						//~ avatar.body.velocity.x = Math.cos(avatar.rotation) * 40;
+						//~ avatar.body.velocity.y = Math.sin(avatar.rotation) * 40;
+						//~ vehicle.calculate_pos_diff(avatar.body.x, avatar.body.y);
+						//~ 
+						//~ vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
+						//~ vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
+					//~ }
+					//~ else
+					//~ {
+						//~ this.vehicle_stop();
+						//~ this.bmd.clear();
+					//~ }
+				}
+			},
+			
+			vehicle_setGoal: function () {
+				if (game.time.now > vehicle.next_move) 
+				{
+					vehicle.next_move = game.time.now + vehicle.move_rate;
+					p = {x:game.input.x, y:game.input.y};
+					vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
+					vehicle.rot_current = avatar.rotation;
+					vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
+					vehicle.pos_expected = p;
+					vehicle.calculate_pos_diff(avatar.body.x, avatar.body.y);
+					
+					this.bmd.clear();
+					this.bmd.rect(p.x-4,p.y-4, 8,8, 'rgba(200,230,200,1)');
+					
+					this.path.fromAngle(avatar.body.x + avatar.body.width/2,
+										avatar.body.y + avatar.body.height/2,
+										vehicle.rot_expected,
+										vehicle.pos_diff);
+					game.debug.geom(this.path);
 				}
 			},
 			
@@ -103,29 +165,7 @@
 				avatar.body.velocity.y = 0;
 			},
 			plot: function () {
-
-				//~ this.bmd.clear();
 				this.bmd.rect(avatar.body.x,avatar.body.y, 1,1, 'rgba(0,0,0,1)');
-				//~ this.path = [];
-//~ 
-				//~ var x = 1 / game.width;
-//~ 
-				//~ for (var i = 0; i <= 1; i += x)
-				//~ {
-					//~ var px = this.math.linearInterpolation(this.points.x, i);
-					//~ var py = this.math.linearInterpolation(this.points.y, i);
-					//~ 
-					//~ this.path.push( { x: px, y: py });
-//~ 
-					//~ this.bmd.rect(px, py, 1, 1, 'rgba(0, 0, 25, 1)');
-					//~ console.log(px,py);
-				//~ }
-//~ 
-				//~ for (var p = 0; p < this.points.x.length; p++)
-				//~ {
-					//~ this.bmd.rect(this.points.x[p]-3, this.points.y[p]-3, 6, 6, 'rgba(255, 0, 0, 1)');
-				//~ }
-
 			},
 		}
 
