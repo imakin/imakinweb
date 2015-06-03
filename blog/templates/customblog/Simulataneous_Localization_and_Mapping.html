@@ -17,6 +17,7 @@
 		// dokumentasi http://phaser.io/docs/2.3.0/Phaser.Game.html
 		
 		var PI = 3.14159;
+		var RADTODEG = 57.2957795;
 		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'div_slam',null, true);
 		var echo = console.log
 		var frame = 0;
@@ -26,24 +27,31 @@
 			move_rate:50, 
 			next_move:0,
 			rot_expected:0,
+			rot_expected_c: function() {return this.rot_expected+PI;},
+			rot_expected_cd: function() {return (this.rot_expected+PI)*RADTODEG;},
 			rot_current:0,
+			rot_current_c: function() {return this.rot_current+PI;},
+			rot_current_cd: function() {return (this.rot_current+PI)*RADTODEG;},
 			rot_diff:0,
+			rot_diff_d:function() {return (this.rot_diff*RADTODEG);},
 			rot_taken:'stop',
 			pos_expected: {
 				x:0,
 				y:0
 			},
-			pos_current: {
-				x:0,
-				y:0
-			},
+			pos_current: function() { return ({x:avatar.body.x, y:avatar.body.y});},
 			pos_diff: 0,
 			
-			calculate_rot_diff: function() {
-				this.rot_diff = Math.max.apply(Math,[this.rot_current,this.rot_expected]) - Math.min.apply(Math,[this.rot_current,this.rot_expected]);
+			update_rot_diff: function() {
+				this.rot_diff = Math.max(this.rot_current_c(),this.rot_expected_c()) - Math.min(this.rot_current_c(),this.rot_expected_c());
 			},
-			calculate_pos_diff: function(current_x,current_y) {
+			update_pos_diff: function() {
+				current_x = avatar.body.x;
+				current_y = avatar.body.y;
 				this.pos_diff = Math.sqrt((this.pos_expected.x-current_x)*(this.pos_expected.x-current_x) + (this.pos_expected.y-current_y)*(this.pos_expected.y-current_y));
+			},
+			update_rot_current: function() { 
+				this.rot_current = avatar.rotation;
 			},
 		};
 		
@@ -75,60 +83,31 @@
 					this.vehicle_setGoal();
 				}
 				
-				if (vehicle.rot_diff>0.2)
+				this.info.text = "r.rot_expected "+vehicle.rot_expected+" ("+vehicle.rot_expected_cd()+")"+
+								"\n a.rot"+avatar.rotation +
+								"\n v.rot_current"+vehicle.rot_current +" ("+vehicle.rot_current_cd()+")"+
+								"\n v.rd"+ vehicle.rot_diff+ " ("+vehicle.rot_diff_d()+")"+
+								"\n v.rt"+vehicle.rot_taken;
+				vehicle.update_rot_current();
+				if (vehicle.rot_diff_d()>5)
 				{
-					this.info.text = vehicle.rot_expected+" : "+avatar.rotation +" : "+ vehicle.rot_diff;
-					if (vehicle.rotation<0)
-					{
-						/**-- which way is shorter, turn left or right? */
-						if (vehicle.rot_taken!='left' && -avatar.rotation>vehicle.rot_expected) {
-							/**-- right one is shorter */
-							vehicle.rot_current = (vehicle.rot_current + 0.05);
-							if (vehicle.rot_current>PI)
-								vehicle.rot_current = PI - (-vehicle.rot_current-PI)
-							avatar.rotation = vehicle.rot_current;
-							vehicle.rot_taken = 'right';
-						}
-						else if (vehicle.rot_taken!='right'){
-							/**-- left one is shorter */
-							vehicle.rot_current = (vehicle.rot_current - 0.05);
-							avatar.rotation = vehicle.rot_current;
-							vehicle.rot_taken = 'left';
-						}
-					}
+					if (vehicle.rot_expected_cd()> vehicle.rot_current_cd()+180)
+						vehicle.rot_taken = 'left';
 					else
-					{
-						/**-- which way is shorter, turn left or right? */
-						if (vehicle.rot_taken!='right' && -avatar.rotation>vehicle.rot_expected) {
-							/**-- left one is shorter */
-							vehicle.rot_current = (vehicle.rot_current - 0.05);
-							if (vehicle.rot_current>PI)
-								vehicle.rot_current = PI - (-vehicle.rot_current-PI)
-							avatar.rotation = vehicle.rot_current;
-							vehicle.rot_taken = 'left';
-						}
-						else if (vehicle.rot_taken!='left'){
-							/**-- right one is shorter */
-							vehicle.rot_current = (vehicle.rot_current + 0.05);
-							avatar.rotation = vehicle.rot_current;
-							vehicle.rot_taken = 'right';
-						}
+						vehicle.rot_taken = 'right';
+					
+					if (vehicle.rot_taken == 'left') {
+						vehicle.rot_current = vehicle.rot_current - 0.05;
+						if (vehicle.rot_current_cd() < 0)
+							vehicle.rot_current = ((360+vehicle.rot_current_cd())/RADTODEG)-PI;
 					}
-						//~ /**-- which way is shorter, turn left or right? */
-						//~ if (avatar.rotation>vehicle.rot_expected) {
-							//~ /**-- right one is shorter */
-							//~ avatar.rotation = (avatar.rotation - 0.05)% PI;
-						//~ }
-						//~ else {
-							//~ /**-- left one is shorter */
-							//~ avatar.rotation = (avatar.rotation + 0.05)% PI;
-						//~ }
-					//~ }
-					
-					//~ vehicle.rot_diff = avatar.rotation-vehicle.rot_expected);
-					//~ vehicle.rot_diff = Math.max.apply(avatar.rotation,vehicle.rot_expected) - Math.min.apply(avatar.rotation,vehicle.rot_expected);
-					
-					vehicle.calculate_rot_diff();
+					else {
+						vehicle.rot_current = vehicle.rot_current + 0.05;
+						if (vehicle.rot_current_cd() > 360)
+							vehicle.rot_current = ((vehicle.rot_current_cd()-360)/RADTODEG)-PI;
+					}
+					vehicle.rotation = vehicle.rot_current;
+					vehicle.update_rot_diff();
 					//~ var angle = avatar.rotation;
 					//~ var speed = 30;
 					//~ avatar.body.velocity.x = Math.cos(angle) * speed;
@@ -142,7 +121,7 @@
 					//~ {
 						//~ avatar.body.velocity.x = Math.cos(avatar.rotation) * 40;
 						//~ avatar.body.velocity.y = Math.sin(avatar.rotation) * 40;
-						//~ vehicle.calculate_pos_diff(avatar.body.x, avatar.body.y);
+						//~ vehicle.update_pos_diff();
 						//~ 
 						//~ vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
 						//~ vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
@@ -162,9 +141,9 @@
 					p = {x:game.input.x, y:game.input.y};
 					vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
 					vehicle.rot_current = avatar.rotation;
-					vehicle.calculate_rot_diff();
+					vehicle.update_rot_diff();
 					vehicle.pos_expected = p;
-					vehicle.calculate_pos_diff(avatar.body.x, avatar.body.y);
+					vehicle.update_pos_diff();
 					
 					this.bmd.clear();
 					this.bmd.rect(p.x-4,p.y-4, 8,8, 'rgba(200,230,200,1)');
@@ -176,7 +155,10 @@
 					game.debug.geom(this.path);
 				}
 			},
-			
+			vehicle_rotInstant: function() {
+				avatar.rotation = vehicle.rot_expected;
+				vehicle.update_rot_current();
+			},
 			vehicle_stop: function() {
 				avatar.body.velocity.x = 0;
 				avatar.body.velocity.y = 0;
