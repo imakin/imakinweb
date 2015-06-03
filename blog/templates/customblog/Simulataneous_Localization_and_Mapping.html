@@ -28,6 +28,7 @@
 			rot_expected:0,
 			rot_current:0,
 			rot_diff:0,
+			rot_taken:'stop',
 			pos_expected: {
 				x:0,
 				y:0
@@ -38,8 +39,8 @@
 			},
 			pos_diff: 0,
 			
-			calculate_rot_diff: function(current_rot) {
-				this.rot_diff = Math.abs(current_rot-vehicle.rot_expected);
+			calculate_rot_diff: function() {
+				this.rot_diff = Math.max.apply(Math,[this.rot_current,this.rot_expected]) - Math.min.apply(Math,[this.rot_current,this.rot_expected]);
 			},
 			calculate_pos_diff: function(current_x,current_y) {
 				this.pos_diff = Math.sqrt((this.pos_expected.x-current_x)*(this.pos_expected.x-current_x) + (this.pos_expected.y-current_y)*(this.pos_expected.y-current_y));
@@ -76,43 +77,58 @@
 				
 				if (vehicle.rot_diff>0.2)
 				{
-					if (vehicle.rot_diff>PI/2)
+					this.info.text = vehicle.rot_expected+" : "+avatar.rotation +" : "+ vehicle.rot_diff;
+					if (vehicle.rotation<0)
 					{
 						/**-- which way is shorter, turn left or right? */
-						if (-avatar.rotation>vehicle.rot_expected) {
+						if (vehicle.rot_taken!='left' && -avatar.rotation>vehicle.rot_expected) {
 							/**-- right one is shorter */
-							//~ var to_rot = (avatar.rotation - 0.05);
-							//~ if (to_rot> -PI)
-								//~ to_rot = PI-(-to_rot-PI);
 							vehicle.rot_current = (vehicle.rot_current + 0.05);
+							if (vehicle.rot_current>PI)
+								vehicle.rot_current = PI - (-vehicle.rot_current-PI)
 							avatar.rotation = vehicle.rot_current;
+							vehicle.rot_taken = 'right';
 						}
-						else {
+						else if (vehicle.rot_taken!='right'){
 							/**-- left one is shorter */
-							//~ avatar.rotation = (avatar.rotation + 0.05)% PI;
 							vehicle.rot_current = (vehicle.rot_current - 0.05);
 							avatar.rotation = vehicle.rot_current;
+							vehicle.rot_taken = 'left';
 						}
 					}
 					else
 					{
 						/**-- which way is shorter, turn left or right? */
-						if (avatar.rotation>vehicle.rot_expected) {
-							/**-- right one is shorter */
-							avatar.rotation = (avatar.rotation - 0.05)% PI;
-						}
-						else {
+						if (vehicle.rot_taken!='right' && -avatar.rotation>vehicle.rot_expected) {
 							/**-- left one is shorter */
-							avatar.rotation = (avatar.rotation + 0.05)% PI;
+							vehicle.rot_current = (vehicle.rot_current - 0.05);
+							if (vehicle.rot_current>PI)
+								vehicle.rot_current = PI - (-vehicle.rot_current-PI)
+							avatar.rotation = vehicle.rot_current;
+							vehicle.rot_taken = 'left';
+						}
+						else if (vehicle.rot_taken!='left'){
+							/**-- right one is shorter */
+							vehicle.rot_current = (vehicle.rot_current + 0.05);
+							avatar.rotation = vehicle.rot_current;
+							vehicle.rot_taken = 'right';
 						}
 					}
+						//~ /**-- which way is shorter, turn left or right? */
+						//~ if (avatar.rotation>vehicle.rot_expected) {
+							//~ /**-- right one is shorter */
+							//~ avatar.rotation = (avatar.rotation - 0.05)% PI;
+						//~ }
+						//~ else {
+							//~ /**-- left one is shorter */
+							//~ avatar.rotation = (avatar.rotation + 0.05)% PI;
+						//~ }
+					//~ }
 					
-					//~ if (avatar.rotation>vehicle.rot_expected)
-						//~ avatar.rotation -= 0.05;
-					//~ else 
-						//~ avatar.rotation += 0.05;
-					vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
+					//~ vehicle.rot_diff = avatar.rotation-vehicle.rot_expected);
+					//~ vehicle.rot_diff = Math.max.apply(avatar.rotation,vehicle.rot_expected) - Math.min.apply(avatar.rotation,vehicle.rot_expected);
 					
+					vehicle.calculate_rot_diff();
 					//~ var angle = avatar.rotation;
 					//~ var speed = 30;
 					//~ avatar.body.velocity.x = Math.cos(angle) * speed;
@@ -120,6 +136,7 @@
 				}
 				else
 				{
+					vehicle.rot_taken = 'stop';
 					this.vehicle_stop();
 					//~ if (vehicle.pos_diff>30)
 					//~ {
@@ -145,7 +162,7 @@
 					p = {x:game.input.x, y:game.input.y};
 					vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
 					vehicle.rot_current = avatar.rotation;
-					vehicle.rot_diff = Math.abs(avatar.rotation-vehicle.rot_expected);
+					vehicle.calculate_rot_diff();
 					vehicle.pos_expected = p;
 					vehicle.calculate_pos_diff(avatar.body.x, avatar.body.y);
 					
