@@ -12,6 +12,9 @@
 	<p>z <span id="dz"></span></p>
 	<p>y <span id="dy"></span></p>
 	<p>x <span id="dx"></span></p>
+	<p>
+		<button id="vibrate" type="button">drreettttt</button>
+	</p>
 </div>
 <script>
 	function main() {
@@ -24,6 +27,17 @@
 			}, 
 			true);
 	}
-	window.onload = this.main();
+	$(
+		function () {
+			main();
+			$("#vibrate").click(
+				function() {
+					if("vibrate" in window.navigator) {
+						window.navigator.vibrate(100);
+					}
+				}
+			);
+		}
+	);
 </script>
 {% endblock %}
