@@ -1,0 +1,29 @@
+{% extends "default.html" %}
+{% block title %}
+	<title>Testing my phone sensors with html - Izzulmakin</title>
+{% endblock %}
+{% block main_inside %}
+<div id="data" style="
+	display:block;
+	text-align:center;
+	font-size:1.5em;
+">
+	<p>i say: <span id="echo"></span></p>
+	<p>z <span id="dz"></span></p>
+	<p>y <span id="dy"></span></p>
+	<p>x <span id="dx"></span></p>
+</div>
+<script>
+	function main() {
+		document.getElementById("echo").innerHTML = "HAI WOROLT!";
+		window.addEventListener("deviceorientation", 
+			function(e) {
+				document.getElementById("dz").innerHTML = e.alpha;
+				document.getElementById("dy").innerHTML = e.beta;
+				document.getElementById("dx").innerHTML = e.gamma;
+			}, 
+			true);
+	}
+	window.onload = this.main();
+</script>
+{% endblock %}
