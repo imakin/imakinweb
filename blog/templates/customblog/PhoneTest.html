@@ -17,24 +17,21 @@
 	</p>
 </div>
 <script>
-	function main() {
-		document.getElementById("echo").innerHTML = "HAI WOROLT!";
-		window.addEventListener("deviceorientation", 
-			function(e) {
-				document.getElementById("dz").innerHTML = e.alpha;
-				document.getElementById("dy").innerHTML = e.beta;
-				document.getElementById("dx").innerHTML = e.gamma;
-			}, 
-			true);
-	}
 	$(
 		function () {
-			main();
 			$("#vibrate").click(
 				function() {
 					if("vibrate" in window.navigator) {
 						window.navigator.vibrate(100);
 					}
+				}
+			);
+			document.getElementById("echo").innerHTML = "HAI WOROLT!";
+			window.addEventListener('deviceorientation', 
+				function(event) {
+					document.getElementById("dz").innerHTML = event.alpha;
+					document.getElementById("dy").innerHTML = event.beta;
+					document.getElementById("dx").innerHTML = event.gamma;
 				}
 			);
 		}
