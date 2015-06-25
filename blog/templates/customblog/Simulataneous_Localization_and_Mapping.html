@@ -42,6 +42,9 @@
 		function DegToRad(x) {
 			return x/RADTODEG;
 		}
+		function getRandomInt(min, max) {
+			return Math.floor(Math.random() * (max - min)) + min;
+		}
 		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'div_slam',null, true);
 		var echo = console.log;
 		var frame = 0;
@@ -114,7 +117,7 @@
 				var a;
 				var foundany; 
 				foundany = false;
-				var res = 5;
+				var res = 10;
 				for(a=0;a<=180;a+=res)
 				{
 					for(var i=0;i<=range;i+=5)
@@ -162,6 +165,52 @@
 				if (!foundany)
 					game.debug.reset();
 					
+			},
+			
+			ransacSensor: function(knownpoint) {
+				/**-- Find Ransac line from knownpoint that's assumed as landmark, knownpoint is in {range,bearing} **/
+				this.update_rot_current();
+				var rotme = this.rot_current_cd();
+				var aim = 90; //-- the sensor direction
+				function aimd() {
+					var res = rotme+aim;
+					if (res>360)
+						res = res - 360;
+					else if (res<0)
+						res = res + 360;
+					return res;
+				}
+				function aimd(x) {
+					var res = rotme+x;
+					if (res>360)
+						res = res - 360;
+					else if (res<0)
+						res = res + 360;
+					return res;
+				}
+				var range = 100; //-- the range where sensor will reach&check
+				
+				var x = vehicle.avatar.body.x + vehicle.avatar.body.width/2 + range*Math.cos(DegToRad(aimd()));
+				var y = vehicle.avatar.body.y + vehicle.avatar.body.height/2 - range*Math.sin(DegToRad(aimd()));
+				main_state.info.text = Math.floor(vehicle.avatar.x)+","+Math.floor(vehicle.avatar.y)+"  "+Math.floor(x)+","+Math.floor(y);
+				
+				main_state.info.text ="";
+				
+				var foundany = false;
+				var p;
+				var MINIML = 20;
+				/**  Get initial points **/
+				if (knownpoint.bearing>0)
+				{
+					while (!foundany)
+					{
+						aim = getRandomInt(0,180);
+						
+					}
+					
+				}
+				
+				
 			},
 		};
 		
