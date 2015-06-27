@@ -114,7 +114,7 @@
 				var a;
 				var foundany; 
 				foundany = false;
-				var res = 5;
+				var res = 10;
 				for(a=0;a<=180;a+=res)
 				{
 					for(var i=0;i<=range;i+=5)
@@ -127,7 +127,7 @@
 						if (game.physics.arcade.getObjectsAtLocation(this.leftSensor.end.x, this.leftSensor.end.y, platforms).length) /** it shows if there is platforms object in certain position **/
 						{
 							main_state.info.text = "found on left, b:"+ Math.floor(aimd(a)) +" r:"+i+"\t\t"+game.time.fps;
-							game.debug.geom(this.leftSensor, "rgb(155,50,50)");
+							//~ game.debug.geom(this.leftSensor, "rgb(155,50,50)");
 							//~ a = 200;
 							foundany=true;
 							break;
@@ -151,7 +151,7 @@
 						if (game.physics.arcade.getObjectsAtLocation(this.rightSensor.end.x, this.rightSensor.end.y, platforms).length) /** it shows if there is platforms object in certain position **/
 						{
 							main_state.info.text = " found on right, b:"+ Math.floor(aimd(a)) +" r:"+i+"\t\t"+game.time.fps;
-							game.debug.geom(this.rightSensor, "rgb(155,50,50)");
+							//~ game.debug.geom(this.rightSensor, "rgb(155,50,50)");
 							//~ a = 200;
 							foundany=true;
 							break;
