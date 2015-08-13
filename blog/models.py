@@ -8,6 +8,7 @@ class Post(models.Model):
 	text = models.TextField(null=True)
 	score = models.IntegerField(default=0)
 	url = models.CharField(max_length=150,null=True)
+	tags = models.CharField(max_length=360,null=True)
 	
 	date_created = models.DateTimeField(default=timezone.now)
 	date_published = models.DateTimeField(blank=True, null=True)

@@ -7,6 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=11; IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+		{% block head_meta %}{% endblock %}
 		{% load staticfiles %}
 		<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 		<script src="{% static 'js/jquery.js' %}"></script>

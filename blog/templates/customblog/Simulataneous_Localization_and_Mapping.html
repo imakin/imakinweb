@@ -1,4 +1,22 @@
 {% extends "default.html" %}
+{% block title %}
+	<title>An attempt to simulate SLAM in HTML5 - Izzulmakin</title>
+{% endblock %}
+{% block head_meta %}
+	<meta name="published" 		content=""/> <!-- this is the excerpt -->
+	<meta name="description" 	content="This is an attempt to simulate Simultaneous Localization and Mapping in a web page"/> <!-- this is the excerpt -->
+	<meta name="keywords" 		content="SLAM, Simulation, HTML5, Phaser.js, Izzulmakin"/> <!-- this is tag -->
+	
+	<meta name="twitter:card" 			content="Blog"/>
+	<meta name="twitter:site" 			content="@makonil"/>
+	<meta name="twitter:creator" 		content="@makonil"/>
+	<meta name="twitter:title" 			content="SLAM in HTML5 - Izzulmakin"/>
+	<meta name="twitter:description" 	content="An attempt to simulate SLAM"/>
+	<meta name="twitter:label1" 		content="SLAM"/>
+	<meta name="twitter:data1" 			content="Extended Kalman Filter Simultaneous Localization and Mapping"/>
+	<meta name="twitter:label2" 		content="HTML5"/>
+	<meta name="twitter:data2" 			content="Using Phaser.js and webgl"/>
+{% endblock %}
 {% block head_inside %}
 	<style>
 		#main{
@@ -18,18 +36,29 @@
 		
 		var PI = 3.14159;
 		var RADTODEG = 57.2957795;
+		function RadToDeg(x) {
+			return x*RADTODEG;
+		}
+		function DegToRad(x) {
+			return x/RADTODEG;
+		}
+		function getRandomInt(min, max) {
+			return Math.floor(Math.random() * (max - min)) + min;
+		}
 		var game = new Phaser.Game(640, 480, Phaser.AUTO, 'div_slam',null, true);
-		var echo = console.log
+		var echo = console.log;
 		var frame = 0;
-		var avatar;
 		var p = {x:0,y:0};
 		var vehicle = {
+			avatar: null,
 			move_rate:50, 
 			next_move:0,
 			rot_expected:0,
+			rot_expected_d: function() {return this.rot_expected*RADTODEG;},
 			rot_expected_c: function() {return this.rot_expected+PI;},
 			rot_expected_cd: function() {return (this.rot_expected+PI)*RADTODEG;},
 			rot_current:0,
+			rot_current_d: function() {return this.rot_current*RADTODEG;},
 			rot_current_c: function() {return this.rot_current+PI;},
 			rot_current_cd: function() {return (this.rot_current+PI)*RADTODEG;},
 			rot_diff:0,
@@ -39,19 +68,149 @@
 				x:0,
 				y:0
 			},
-			pos_current: function() { return ({x:avatar.body.x, y:avatar.body.y});},
+			pos_current: function() { return ({x:this.avatar.body.x, y:this.avatar.body.y});},
 			pos_diff: 0,
 			
 			update_rot_diff: function() {
 				this.rot_diff = Math.max(this.rot_current_c(),this.rot_expected_c()) - Math.min(this.rot_current_c(),this.rot_expected_c());
 			},
 			update_pos_diff: function() {
-				current_x = avatar.body.x;
-				current_y = avatar.body.y;
+				current_x = this.avatar.body.x;
+				current_y = this.avatar.body.y;
 				this.pos_diff = Math.sqrt((this.pos_expected.x-current_x)*(this.pos_expected.x-current_x) + (this.pos_expected.y-current_y)*(this.pos_expected.y-current_y));
 			},
 			update_rot_current: function() { 
-				this.rot_current = avatar.rotation;
+				this.rot_current = this.avatar.rotation;
+			},
+			rightSensor: new Phaser.Line(0,0,0,0),
+			leftSensor: new Phaser.Line(0,0,0,0),
+			
+			checkSensor: function(len) {
+				this.update_rot_current();
+				var rotme = this.rot_current_cd();
+				var aim = 90; //-- the sensor direction
+				function aimd() {
+					var res = rotme+aim;
+					if (res>360)
+						res = res - 360;
+					else if (res<0)
+						res = res + 360;
+					return res;
+				}
+				function aimd(x) {
+					var res = rotme+x;
+					if (res>360)
+						res = res - 360;
+					else if (res<0)
+						res = res + 360;
+					return res;
+				}
+				var range = 100; //-- the range where sensor will reach&check
+				
+				var x = vehicle.avatar.body.x + vehicle.avatar.body.width/2 + range*Math.cos(DegToRad(aimd()));
+				var y = vehicle.avatar.body.y + vehicle.avatar.body.height/2 - range*Math.sin(DegToRad(aimd()));
+				main_state.info.text = Math.floor(vehicle.avatar.x)+","+Math.floor(vehicle.avatar.y)+"  "+Math.floor(x)+","+Math.floor(y);
+				
+				main_state.info.text ="";
+				
+				aim = 90;
+				var a;
+				var foundany; 
+				foundany = false;
+				var res = 10;
+				for(a=0;a<=180;a+=res)
+				{
+					for(var i=0;i<=range;i+=5)
+					{
+						this.leftSensor.fromAngle(vehicle.avatar.body.x + vehicle.avatar.body.width/2,
+													vehicle.avatar.body.y + vehicle.avatar.body.height/2,
+													DegToRad(aimd(a)),
+													i);
+						//~ game.debug.geom(this.leftSensor);
+						if (game.physics.arcade.getObjectsAtLocation(this.leftSensor.end.x, this.leftSensor.end.y, platforms).length) /** it shows if there is platforms object in certain position **/
+						{
+							main_state.info.text = "found on left, b:"+ Math.floor(aimd(a)) +" r:"+i+"\t\t"+game.time.fps;
+							//~ game.debug.geom(this.leftSensor, "rgb(155,50,50)");
+							//~ a = 200;
+							foundany=true;
+							break;
+						}
+					}
+					//~ if (a==200) break;
+				}
+				//~ if (a!=200)
+					//~ game.debug.reset();
+					
+				aim = -90;
+				for(a=0;a>=-180;a-=res)
+				{
+					for(var i=0;i<=range;i+=5)
+					{
+						this.rightSensor.fromAngle(vehicle.avatar.body.x + vehicle.avatar.body.width/2,
+													vehicle.avatar.body.y + vehicle.avatar.body.height/2,
+													DegToRad(aimd(a)),
+													i);
+						//~ game.debug.geom(this.rightSensor);
+						if (game.physics.arcade.getObjectsAtLocation(this.rightSensor.end.x, this.rightSensor.end.y, platforms).length) /** it shows if there is platforms object in certain position **/
+						{
+							main_state.info.text = " found on right, b:"+ Math.floor(aimd(a)) +" r:"+i+"\t\t"+game.time.fps;
+							//~ game.debug.geom(this.rightSensor, "rgb(155,50,50)");
+							//~ a = 200;
+							foundany=true;
+							break;
+						}
+					}
+					//~ if (a==200) break;
+				}
+				if (!foundany)
+					game.debug.reset();
+					
+			},
+			
+			ransacSensor: function(knownpoint) {
+				/**-- Find Ransac line from knownpoint that's assumed as landmark, knownpoint is in {range,bearing} **/
+				this.update_rot_current();
+				var rotme = this.rot_current_cd();
+				var aim = 90; //-- the sensor direction
+				function aimd() {
+					var res = rotme+aim;
+					if (res>360)
+						res = res - 360;
+					else if (res<0)
+						res = res + 360;
+					return res;
+				}
+				function aimd(x) {
+					var res = rotme+x;
+					if (res>360)
+						res = res - 360;
+					else if (res<0)
+						res = res + 360;
+					return res;
+				}
+				var range = 100; //-- the range where sensor will reach&check
+				
+				var x = vehicle.avatar.body.x + vehicle.avatar.body.width/2 + range*Math.cos(DegToRad(aimd()));
+				var y = vehicle.avatar.body.y + vehicle.avatar.body.height/2 - range*Math.sin(DegToRad(aimd()));
+				main_state.info.text = Math.floor(vehicle.avatar.x)+","+Math.floor(vehicle.avatar.y)+"  "+Math.floor(x)+","+Math.floor(y);
+				
+				main_state.info.text ="";
+				
+				var foundany = false;
+				var p;
+				var MINIML = 20;
+				/**  Get initial points **/
+				if (knownpoint.bearing>0)
+				{
+					while (!foundany)
+					{
+						aim = getRandomInt(0,180);
+						
+					}
+					
+				}
+				
+				
 			},
 		};
 		
@@ -61,33 +220,53 @@
 			},
 			
 			preload: function() {
+				game.load.image('concrete', '/static/img/custom/slam/concrete.png');
 				game.load.image('sprite_vehicle', '/static/img/custom/slam/avatar.png');
 			},
 
 			create: function() { 
 				game.physics.startSystem(Phaser.Physics.ARCADE);
-				avatar = game.add.sprite(250, 300, 'sprite_vehicle');
-				avatar.anchor.set(0.5);
-				game.physics.enable(avatar, Phaser.Physics.ARCADE);
-				avatar.body.allowRotation = true;
+				vehicle.avatar = game.add.sprite(250, 300, 'sprite_vehicle');
+				vehicle.avatar.anchor.set(0.5);
+				game.physics.enable(vehicle.avatar, Phaser.Physics.ARCADE);
+				game.physics.arcade.enable(vehicle.avatar);
+				vehicle.avatar.body.allowRotation = true;
+				vehicle.avatar.body.collideWorldBounds = true;
+				
 				this.bmd = game.add.bitmapData(game.width,game.height);
 				this.bmd.addToWorld();
 				this.bmd.clear();
 				this.info = game.add.text(20,20,"Bismillah",{font:"normal 12px Arial"});
 				this.plot();
 				
+				/** platforms **/
+				platforms = game.add.group();
+				platforms.enableBody = true;
+				var wall = platforms.create(150, 150, 'concrete');
+				wall.body.immovable = true;
+				wall.width = 300;
+				wall.height = 20;
+				var wall = platforms.create(150, 250, 'concrete');
+				wall.body.immovable = true;
+				wall.width = 300;
+				wall.height = 20;
+
 				this.path = new Phaser.Line(0,0,0,0);
 			},
 			update: function() {
+				//~ game.physics.arcade.collide(vehicle.avatar, platforms);
+				vehicle.checkSensor();
+				//~ if (game.physics.arcade.getObjectsAtLocation(155, 155, platforms).length) /** it shows if there is platforms object in certain position **/
+				
 				if (game.input.activePointer.isDown) {
 					this.vehicle_setGoal();
 				}
 				
-				this.info.text = "r.rot_expected "+vehicle.rot_expected+" ("+vehicle.rot_expected_cd()+")"+
-								"\n a.rot"+avatar.rotation +
-								"\n v.rot_current"+vehicle.rot_current +" ("+vehicle.rot_current_cd()+")"+
-								"\n v.rd"+ vehicle.rot_diff+ " ("+vehicle.rot_diff_d()+")"+
-								"\n v.rt"+vehicle.rot_taken;
+				//~ this.info.text = "r.rot_expected "+vehicle.rot_expected+" ("+vehicle.rot_expected_cd()+")"+
+								//~ "\n a.rot"+vehicle.avatar.rotation +
+								//~ "\n v.rot_current"+vehicle.rot_current +" ("+vehicle.rot_current_cd()+")"+
+								//~ "\n v.rd"+ vehicle.rot_diff+ " ("+vehicle.rot_diff_d()+")"+
+								//~ "\n v.rt"+vehicle.rot_taken;
 				vehicle.update_rot_current();
 				if (vehicle.rot_diff_d()>5)
 				{
@@ -121,12 +300,12 @@
 						if (vehicle.rot_current_cd() > 360)
 							vehicle.rot_current = ((vehicle.rot_current_cd()-360)/RADTODEG)-PI;
 					}
-					avatar.rotation = vehicle.rot_current;
+					vehicle.avatar.rotation = vehicle.rot_current;
 					vehicle.update_rot_diff();
-					var angle = avatar.rotation;
+					var angle = vehicle.avatar.rotation;
 					var speed = 30;
-					avatar.body.velocity.x = Math.cos(angle) * speed;
-					avatar.body.velocity.y = Math.sin(angle) * speed;
+					vehicle.avatar.body.velocity.x = Math.cos(angle) * speed;
+					vehicle.avatar.body.velocity.y = Math.sin(angle) * speed;
 				}
 				else
 				{
@@ -134,11 +313,11 @@
 					this.vehicle_stop();
 					if (vehicle.pos_diff>30)
 					{
-						avatar.body.velocity.x = Math.cos(avatar.rotation) * 40;
-						avatar.body.velocity.y = Math.sin(avatar.rotation) * 40;
+						vehicle.avatar.body.velocity.x = Math.cos(vehicle.avatar.rotation) * 40;
+						vehicle.avatar.body.velocity.y = Math.sin(vehicle.avatar.rotation) * 40;
 						vehicle.update_pos_diff();
 						
-						vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
+						vehicle.rot_expected = game.physics.arcade.angleToXY(vehicle.avatar,p.x,p.y);
 						vehicle.update_rot_current();
 						vehicle.update_rot_diff();
 					}
@@ -152,8 +331,8 @@
 			
 			vehicle_setGoal: function () {
 				p = {x:game.input.x, y:game.input.y};
-				vehicle.rot_expected = game.physics.arcade.angleToXY(avatar,p.x,p.y);
-				vehicle.rot_current = avatar.rotation;
+				vehicle.rot_expected = game.physics.arcade.angleToXY(vehicle.avatar,p.x,p.y);
+				vehicle.rot_current = vehicle.avatar.rotation;
 				vehicle.update_rot_diff();
 				vehicle.pos_expected = p;
 				vehicle.update_pos_diff();
@@ -161,22 +340,22 @@
 				this.bmd.clear();
 				this.bmd.rect(p.x-4,p.y-4, 8,8, 'rgba(200,230,200,1)');
 				
-				this.path.fromAngle(avatar.body.x + avatar.body.width/2,
-									avatar.body.y + avatar.body.height/2,
+				this.path.fromAngle(vehicle.avatar.body.x + vehicle.avatar.body.width/2,
+									vehicle.avatar.body.y + vehicle.avatar.body.height/2,
 									vehicle.rot_expected,
 									vehicle.pos_diff);
 				game.debug.geom(this.path);
 			},
 			vehicle_rotInstant: function() {
-				avatar.rotation = vehicle.rot_expected;
+				vehicle.avatar.rotation = vehicle.rot_expected;
 				vehicle.update_rot_current();
 			},
 			vehicle_stop: function() {
-				avatar.body.velocity.x = 0;
-				avatar.body.velocity.y = 0;
+				vehicle.avatar.body.velocity.x = 0;
+				vehicle.avatar.body.velocity.y = 0;
 			},
 			plot: function () {
-				this.bmd.rect(avatar.body.x,avatar.body.y, 1,1, 'rgba(0,0,0,1)');
+				this.bmd.rect(vehicle.avatar.body.x,vehicle.avatar.body.y, 1,1, 'rgba(0,0,0,1)');
 			},
 		}
 

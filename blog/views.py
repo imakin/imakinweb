@@ -11,16 +11,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Create your views here.
 def ListPost(request):
 	def _SQLite():
-		return Post.objects.all().order_by('date_published')
+		#~ return Post.objects.all().order_by('date_published')
+		return Post.objects.all().order_by('-date_published')
 		
 	def _Custom():
 		""" ambil blog yg ada """
 		files = os.listdir(os.path.join(BASE_DIR,'blog','templates','customblog'))#-- this is custom blog dir
 		blogsdata = re.compile("(\w*).html").findall(str(files))
 		blogsrange = range(len(blogsdata))
+		blogs = []
 		for x in range(len(blogsdata)):
-			blogsdata[x] = (blogsdata[x],blogsdata[x].replace("_"," "))
-		return blogsdata
+			blogs.append(	(blogsdata[x],blogsdata[x].replace("_"," "))	)
+		return blogs
 	
 	return render(request, 'listpost.html', {'posts_sqlite':_SQLite(), 'posts_custom':_Custom(), 'ok':330})
 
