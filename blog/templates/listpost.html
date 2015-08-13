@@ -5,6 +5,13 @@
 {% endblock %}
 {% block main_inside %}
 	<ul>
+	{% for post in posts_custom %}
+		<li>
+			<a href="read/{{ post.0 }}/C">
+				{{ post.1 }}
+			</a>
+		</li>
+	{% endfor %}
 	{% for post in posts_sqlite %}
 		<li>
 			<a href="read/{{ post.url }}/">
@@ -15,13 +22,6 @@
 						<p>{{ post.excerpt }}</p>
 					{% endautoescape %}
 				</div>
-			</a>
-		</li>
-	{% endfor %}
-	{% for post in posts_custom %}
-		<li>
-			<a href="read/{{ post.0 }}/C">
-				{{ post.1 }}
 			</a>
 		</li>
 	{% endfor %}

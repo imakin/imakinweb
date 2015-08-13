@@ -94,7 +94,11 @@ h1.normal {
   border-top: solid 1px #c8fac8;
   border-left: solid 1px #fac8c8;
   border-bottom: solid 1px #c8c8c8;
-  border-right: solid 1px #fac8c8; }
+  border-right: solid 1px #fac8c8;
+  line-height: 1.4em; }
+  #main p:before {
+    content: " ";
+    margin-right: 2.5em; }
   #main ul {
     padding: 0px;
     margin-left: -50px;
@@ -165,3 +169,31 @@ footer {
     #main ul {
       width: 100%;
       margin-left: auto; } }
+.linespacer {
+  height: 2em;
+  display: block; }
+
+h2 {
+  font-weight: normal;
+  font-style: italic;
+  display: inline-block;
+  margin-left: 2.5em; }
+
+.quote {
+  font-weight: normal;
+  font-size: 1.5em;
+  display: block;
+  color: #B3B3B3;
+  width: 60%;
+  margin-top: 20px;
+  margin-bottom: 20px; }
+
+.quote:before {
+  content: '"';
+  font-size: 60px;
+  font-family: Trebuchet Ms; }
+
+.quote:after {
+  content: '"';
+  font-size: 30px;
+  font-family: Trebuchet Ms; }
