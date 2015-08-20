@@ -8,20 +8,28 @@
 {% endblock %}
 {% block main_inside %}
 
+	<div id="accounttitle">
+		<h3 id="incometitle">Income accounts</h3>
+		<h3 id="basetitle">Base accounts</h3>
+		<h3 id="expensetitle">Expense accounts</h3>
+	</div>
 	<div id="accounts">
 		<ul id="income">
-			<li>Job Salary</li>
+			<li id="aa">Job Salary</li>
 			<li>Side Project Income</li>
 			<li>Credit Paid</li>
+			<li>Untracked Income</li>
 		</ul>
-		<canvas id="incomelines" width="100px" height="278px">
+		<canvas id="incomelines" width="50px" height="278px">
 		</canvas>
 		<ul id="base">
-			<li>Cash in Hand</li>
+			<li id="active">Cash in Hand</li>
 			<li>Bank Account Manja</li>
 			<li>Bank Account ABC</li>
+			<li>e-Money</li>
+			<li>T-money</li>
 		</ul>
-		
+		<canvas id="expenselines" width="50px" height="278px"></canvas>
 		<ul id="expense">
 			<li>Eating</li>
 			<li>Transportation</li>
@@ -34,32 +42,72 @@
 		</ul>
 		
 		<script>
-			var ctx = document.getElementById("incomelines").getContext("2d");	
-			ctx.beginPath();
-				
 			
+			var ctincome = document.getElementById("incomelines").getContext("2d");	
 			
+			var incomeh = $("#income").height(); 						//-- calculate the height of the income div
+			$("#incomelines").attr("height",incomeh); 					//-- match the canvas line
+			var totalh = $("#accounts").height(); 						//-- this is the height of the container.
+			var incomey = (totalh-incomeh)/2; 							//-- this is the expected top position (relative to parent) of the income ul,
+																			//-- 	so that it can be in vertically centered
+			$("#income").css("margin-top", incomey); 					//-- and set its top position
+			$("#incomelines").css("margin-top", incomey);
 			
-			var basetop = $("#income").position().top;
+			ctincome.beginPath();
+			var incomepagey = $("#income").offset().top;
 			$("#income li").each(
 				function() {
-					var y = $(this).position().top - basetop + 17;
-					ctx.moveTo(0, y);
-					ctx.lineTo(40, y);
-					ctx.strokeStyle = "#BDBDBD";
-					ctx.stroke();
+					var y = $(this).offset().top - incomepagey + 16;	//-- match each line drawing to each li
+					ctincome.moveTo(0, y);
+					ctincome.lineTo(30, y);
+					ctincome.strokeStyle = "#BDBDBD";
+					ctincome.stroke();
 				}
 			);
-			var totalh = $("#accounts").height();
-			var incomey = (totalh-incomeh)/2;
-			$("#income").css("margin-top", incomey);
-			var incomeh = $("#income").height();
-			ctx.moveTo(50,basetop);
-			ctx.lineTo(60,basetop);
-			ctx.lineTo(60,incomeh);
-			ctx.lineTo(50,incomeh);
-			ctx.strokeStyle = "#ff0000";
-			ctx.stroke();
+			
+			ctincome.beginPath();
+			ctincome.moveTo(25,1); 											//-- the block lines of income ul
+			ctincome.lineTo(45,1);
+			ctincome.lineTo(45,incomeh-2);
+			ctincome.lineTo(25,incomeh-2);
+			ctincome.strokeStyle = "#aa0000";
+			ctincome.stroke();
+			
+			
+			
+			var baseh = $("#base").height();
+			$("#baselines").attr("height", baseh);
+			var basey = (totalh-baseh)/2;
+			$("#base").css("margin-top",basey);
+			
+			
+			var ctexpense = document.getElementById("expenselines").getContext("2d");	
+			
+			var expenseh = $("#expense").height();
+			$("#expenselines").attr("height", expenseh);
+			var expensey = (totalh-expenseh)/2;
+			$("#expense").css("margin-top",expensey);
+			$("#expenselines").css("margin-top",expensey);
+			var expensepagey = $("#expense").offset().top;
+			
+			ctexpense.beginPath();
+			$("#expense li").each(
+				function() {
+					var y = $(this).offset().top - expensepagey + 16;
+					ctexpense.moveTo(20,y);
+					ctexpense.lineTo(50,y);
+					ctexpense.strokeStyle = "#BDBDBD";
+					ctexpense.stroke();
+				}
+			);
+			ctexpense.beginPath();
+			ctexpense.moveTo(15,1); 											//-- the block lines of income ul
+			ctexpense.lineTo(5,1);
+			ctexpense.lineTo(5,expenseh-2);
+			ctexpense.lineTo(15,expenseh-2);
+			ctexpense.strokeStyle = "#aa0000";
+			ctexpense.stroke();
+			
 		</script>
 	</div>
 	
@@ -76,7 +124,7 @@
 			So i bought myself an Android smartphone, for the sake of the GPS &amp; map navigation. (yoi, my first smartphone, at the age of 22)
 		</p>
 		<p>
-			In early 2015, after moving to work in Banten i found a good application for that in Android PlayStore: 
+			In early 2015, after moving to work in Banten i found a good application to do that in Android PlayStore: 
 			<em>Income and Expense Insight</em> which i used to use a lot. 
 		</p>
 	</div>
@@ -87,11 +135,11 @@
 		But then, I still needed to track my Bank account using other application.
 		until in mid July 2015 i learned myself an Android Development with Java, and i want to add something usefull (to me at least): Multiple Bank account.
 	</p>
-	<div class="quote">in every data input, the income &amp; expense flow to a single account: the so-called <b>Base account</b></div>
+	<div class="quote">in every data of transaction, the income &amp; expense flows to a single account: the so-called <b>Base account</b></div>
 	<p>
 		Some people might said, it would be just the same as common accounting: input data which incomes equal expenses. 
 		But let's keep the simplicity of the application which aimed for daily simple transaction: 
-		in every data input, the income &amp; expense flow to a single account: the so-called <b>Base account</b>
+		in every data of transaction, the income &amp; expense flows to a single account: the so-called <b>Base account</b>
 		The next simplicity is that the autogenerated reference number, which the user does not have to bother seing it, nor writing it himself. 
 		All s/he need to write is description, which is not even mandatory!
 	</p>
