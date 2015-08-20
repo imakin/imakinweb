@@ -1,0 +1,56 @@
+#accounts{
+	padding:20px;
+	#income{
+		vertical-align:top;
+		display:inline-block;
+		width:200px;
+		margin:0px;
+		li{
+			margin: 0px;
+			margin-bottom:5px;
+			padding:3px;
+			border-radius:5px;
+			border:solid 2px #c4c4c4;
+			color: #7B9493;
+			display:block;
+			text-align:center;
+		}
+	}
+	#incomelines{
+		vertical-align:top;
+		display:inline-block;
+	}
+	#base{
+		vertical-align:top;
+		display:inline-block;
+		width:200px;
+		margin:0px;
+		li{
+			margin: 0px;
+			margin-bottom:5px;
+			padding:3px;
+			border-radius:5px;
+			border:solid 2px #000000;
+			background-color:#57669C;
+			color: #F8F7DB;
+			display:block;
+			text-align:center;
+		}
+	}
+	#expense{
+		vertical-align:top;
+		display:inline-block;
+		width:200px;
+		margin:0px;
+		li{
+			margin: 0px;
+			margin-bottom:5px;
+			padding:3px;
+			border-radius:5px;
+			border:solid 2px #c4c4c4;
+			color: #7B9493;
+			display:block;
+			text-align:center;
+		}
+	}
+}

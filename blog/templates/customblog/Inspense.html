@@ -2,9 +2,68 @@
 {% block title %}
 	<title>Inspense. An easy accounting like application for daily tracking &amp; simple transactions - Izzulmakin</title>
 {% endblock %}
+{% block head_inside %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/inspense/style.css' %}">
+{% endblock %}
 {% block main_inside %}
 
-	{% load staticfiles %}
+	<div id="accounts">
+		<ul id="income">
+			<li>Job Salary</li>
+			<li>Side Project Income</li>
+			<li>Credit Paid</li>
+		</ul>
+		<canvas id="incomelines" width="100px" height="278px">
+		</canvas>
+		<ul id="base">
+			<li>Cash in Hand</li>
+			<li>Bank Account Manja</li>
+			<li>Bank Account ABC</li>
+		</ul>
+		
+		<ul id="expense">
+			<li>Eating</li>
+			<li>Transportation</li>
+			<li>Home care</li>
+			<li>Internet/charge</li>
+			<li>Vacation</li>
+			<li>Zakat</li>
+			<li>Charity/giving/infaq</li>
+			<li>Lost/Untracked expenses</li>
+		</ul>
+		
+		<script>
+			var ctx = document.getElementById("incomelines").getContext("2d");	
+			ctx.beginPath();
+				
+			
+			
+			
+			var basetop = $("#income").position().top;
+			$("#income li").each(
+				function() {
+					var y = $(this).position().top - basetop + 17;
+					ctx.moveTo(0, y);
+					ctx.lineTo(40, y);
+					ctx.strokeStyle = "#BDBDBD";
+					ctx.stroke();
+				}
+			);
+			var totalh = $("#accounts").height();
+			var incomey = (totalh-incomeh)/2;
+			$("#income").css("margin-top", incomey);
+			var incomeh = $("#income").height();
+			ctx.moveTo(50,basetop);
+			ctx.lineTo(60,basetop);
+			ctx.lineTo(60,incomeh);
+			ctx.lineTo(50,incomeh);
+			ctx.strokeStyle = "#ff0000";
+			ctx.stroke();
+		</script>
+	</div>
+	
+	
 	<p>Too Long; Didn't Read: <a href="https://github.com/imakin/Inspense" title="izzulmakin code repository">https://github.com/imakin/Inspense</a></p>
 	<div class="linespacer"></div>
 	<div class="preamble">
