@@ -5,9 +5,10 @@
 body {
   padding: 0px;
   margin: 0px;
-  font-family: "Sans", "Arial";
-  font-size: 14px;
-  background-color: #e8e8e8; }
+  font-family: "Helvetica", "Arial", "Sans";
+  font-size: 18px;
+  color: #393939;
+  background-color: white; }
 
 a, a:visited {
   color: blue;
@@ -31,7 +32,7 @@ header {
   color: #5286A0;
   line-height: 80px;
   z-index: 0;
-  font-family: "Sans", "Arial"; }
+  font-family: "Helvetica", "Arial", "Sans"; }
   header h1 {
     font-size: 1em;
     display: inline-block;
@@ -43,12 +44,12 @@ header {
     margin-right: -10px;
     font-size: 0px; }
     header ul li {
-      font-size: 14px;
+      font-size: 18px;
       display: inline-block;
       vertical-align: middle; }
       header ul li a {
         color: #3B0000;
-        font-size: 0.78571em;
+        font-size: 0.61111em;
         display: inline-block;
         padding-left: 10px;
         padding-right: 10px; }
@@ -74,7 +75,7 @@ header {
 
 .normal {
   color: black;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: normal; }
 
 h1.normal {
@@ -91,14 +92,14 @@ h1.normal {
   margin: 0px auto;
   margin-top: 50px;
   background-color: #fffcfc;
-  border-top: solid 1px #c8fac8;
-  border-left: solid 1px #fac8c8;
-  border-bottom: solid 1px #c8c8c8;
-  border-right: solid 1px #fac8c8;
   line-height: 1.4em; }
-  #main p:before {
-    content: " ";
-    margin-right: 2.5em; }
+  #main #articles {
+    width: 640px;
+    display: block;
+    margin: 0px auto;
+    line-height: 1.5em; }
+  #main p {
+    margin-bottom: 30px; }
   #main ul {
     padding: 0px;
     margin-left: -50px;

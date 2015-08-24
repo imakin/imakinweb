@@ -1,7 +1,9 @@
 $pagewidth: 960px;
+$articlewidth:640px;
 $px:px;
-$primaryfont:"Sans","Arial";
-$primaryfontsize:14px;
+$primaryfont:"Helvetica","Arial","Sans";
+$primaryfontsize:18px;
+$primaryfontcolor:#393939;
 
 
 *{padding:0px;margin:0px;}
@@ -10,7 +12,8 @@ body{
 	margin:0px;
 	font-family:$primaryfont;
 	font-size:$primaryfontsize;
-	background-color:rgb(232,232,232);
+	color:$primaryfontcolor;
+	background-color:white;
 }
 a,a:visited{
 	color:blue;
@@ -113,14 +116,15 @@ h1.normal{
 	margin:0px auto;
 	margin-top:50px;
 	background-color:rgb(255,252,252);
-	border-top:solid 1px rgb(200,250,200);
-	border-left:solid 1px rgb(250,200,200);
-	border-bottom:solid 1px rgb(200,200,200);
-	border-right:solid 1px rgb(250,200,200);
 	line-height:1.4em;
-	p:before{
-		content:" ";
-		margin-right:2.5em;
+	#articles{
+		width:$articlewidth;
+		display:block;
+		margin:0px auto;
+		line-height:1.5em;
+	}
+	p{
+		margin-bottom:30px;
 	}
 	ul{
 		padding:0px;
