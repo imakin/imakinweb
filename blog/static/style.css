@@ -6,7 +6,7 @@ body {
   padding: 0px;
   margin: 0px;
   font-family: "Helvetica", "Arial", "Sans";
-  font-size: 18px;
+  font-size: 16px;
   color: #393939;
   background-color: white; }
 
@@ -44,12 +44,12 @@ header {
     margin-right: -10px;
     font-size: 0px; }
     header ul li {
-      font-size: 18px;
+      font-size: 16px;
       display: inline-block;
       vertical-align: middle; }
       header ul li a {
         color: #3B0000;
-        font-size: 0.61111em;
+        font-size: 0.6875em;
         display: inline-block;
         padding-left: 10px;
         padding-right: 10px; }
@@ -75,7 +75,7 @@ header {
 
 .normal {
   color: black;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: normal; }
 
 h1.normal {

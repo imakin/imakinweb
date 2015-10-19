@@ -1,29 +1,32 @@
 {% extends "default.html" %}
 {% block head_inside %}
-	{% load staticfiles %}
-	<script type='text/javascript' src="{% static 'js/listpost.js' %}"></script>
+    {% load staticfiles %}
+    <script type='text/javascript' src="{% static 'js/listpost.js' %}"></script>
 {% endblock %}
 {% block main_inside %}
-	<ul>
-	{% for post in posts_custom %}
-		<li>
-			<a href="read/{{ post.0 }}/C">
-				{{ post.1 }}
-			</a>
-		</li>
-	{% endfor %}
-	{% for post in posts_sqlite %}
-		<li>
-			<a href="read/{{ post.url }}/">
-				<div>
-					{{ post }}
-					<span class="date">{{ post.date_published }}</span>
-					{% autoescape off %}
-						<p>{{ post.excerpt }}</p>
-					{% endautoescape %}
-				</div>
-			</a>
-		</li>
-	{% endfor %}
-	</ul>
+    <ul>
+    {% for post in posts_custom %}
+        <li>
+            <a href="read/{{ post.0 }}/C">
+                <div>
+                    {{ post.1 }}
+                    <span class="date">{{ post.2 }}</span>
+                </div>
+            </a>
+        </li>
+    {% endfor %}
+    {% for post in posts_sqlite %}
+        <li>
+            <a href="read/{{ post.url }}/">
+                <div>
+                    {{ post }}
+                    <span class="date">{{ post.date_published }}</span>
+                    {% autoescape off %}
+                        <p>{{ post.excerpt }}</p>
+                    {% endautoescape %}
+                </div>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
 {% endblock %}
