@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def ListPost(request):
     def _SQLite():
         #~ return Post.objects.all().order_by('date_published')
-        return Post.objects.all().order_by('date_published')
+        return Post.objects.all().order_by('-date_published')
 
     def _Custom():
         """ ambil blog yg ada """

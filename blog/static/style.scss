@@ -160,9 +160,17 @@ h1.normal{
         display:inline-block;
     }
 }
-.blog {
+#main .blog {
     div {
         margin:10px auto;
+    }
+    ul {
+        margin-left:0px;
+        li {
+            padding:0px;
+            margin:0px;
+            padding-left:10px;
+        }
     }
 }
 footer{
