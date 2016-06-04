@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404
 
 from django.utils import timezone
 from .models import Post
+from .models import MyCloudData
 
 import os#-- listdir
 import re #-- regex
@@ -42,3 +43,23 @@ def ReadPost(request, permalink,tipe):
     else:
         blogdata = get_object_or_404(Post,url=permalink) #kondisi: url==permalink
         return render(request, 'read.html',{'data':permalink,'blog':blogdata})
+
+def cloud_data_process(request, password, action, data_name, data_value="defaultvalue"):
+    data = ""
+    if (password!="oijmcs2038udsjkn0283udsoij201i29i2i9i"):
+        return 0
+    if (action=="read"):
+        try:
+            data = MyCloudData.objects.get(name=data_name).value
+        except MyCloudData.DoesNotExist:
+            data = ""
+    elif(action=="write"):
+        new_data = None
+        try:
+            new_data = MyCloudData.objects.get(name=data_name)
+            new_data.value = data_value
+        except MyCloudData.DoesNotExist:
+            new_data = MyCloudData.objects.create(name=data_name, value=data_value)
+        new_data.save()
+        data = data_value
+    return render(request, 'blank.html', {'data':data})

@@ -31,3 +31,7 @@ class Comment(models.Model):
 	
 	def __str__(self):
 		return self.author+self.text[:10]
+
+class MyCloudData(models.Model):
+	name = models.CharField(max_length=256, unique=True)
+	value = models.CharField(max_length=256)
