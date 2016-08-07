@@ -46,7 +46,7 @@ def ReadPost(request, permalink,tipe):
 
 def cloud_data_process(request, password, action, data_name, data_value="defaultvalue"):
     data = ""
-    if (password!="oijmcs2038udsjkn0283udsoij201i29i2i9i"):
+    if (password!="aaa"):
         return 0
     if (action=="read"):
         try:
